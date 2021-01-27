@@ -29,3 +29,7 @@ Route::get('/imoveis/editar/{name}', 'App\Http\Controllers\PropertyController@ed
 Route::put('/imoveis/update/{name}', 'App\Http\Controllers\PropertyController@update');
 
 Route::get('/imoveis/remover/{name}', 'App\Http\Controllers\PropertyController@destroy');
+
+Auth::routes();
+
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

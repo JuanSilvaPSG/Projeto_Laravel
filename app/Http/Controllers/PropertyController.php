@@ -11,12 +11,12 @@ class PropertyController extends Controller
     public function index()
     {
         $property = Property::all();
-        return view('property/index')->with('properties',$property);
+        return view('property.index')->with('properties', $property);
     }
 
     public function create()
     {
-        return view('property/create');
+        return view('property.create');
     }
 
     public function store(Request $request)
@@ -25,23 +25,21 @@ class PropertyController extends Controller
 
         $property = [
             'title' => $request->title,
-            'description'=> $request->description,
-            'rental_price'=> $request->rental_price,
-            'sale_price'=> $request->sale_price,
+            'description' => $request->description,
+            'rental_price' => $request->rental_price,
+            'sale_price' => $request->sale_price,
             'name' => $propertySlug,
         ];
         Property::create($property);
         return redirect()->action('App\Http\Controllers\PropertyController@index');
-
     }
 
     public function show($name)
     {
         $property = Property::where('name', $name)->get();
-        if(!empty($property)){
-            return view('property/show')->with('property', $property);
-        }
-        else{
+        if (!empty($property)) {
+            return view('property.show')->with('property', $property);
+        } else {
             return redirect()->action('App\Http\Controllers\PropertyController@index');
         }
     }
@@ -50,10 +48,9 @@ class PropertyController extends Controller
     public function edit($name)
     {
         $property = Property::where('name', $name)->get();
-        if(!empty($property)){
-            return view('property/edit')->with('property', $property);
-        }
-        else{
+        if (!empty($property)) {
+            return view('property.edit')->with('property', $property);
+        } else {
             return redirect()->action('App\Http\Controllers\PropertyController@index');
         }
     }
@@ -79,27 +76,28 @@ class PropertyController extends Controller
     public function destroy($name)
     {
         $property = Property::where('name', $name)->get();
-        if(!empty($property)){
+        if (!empty($property)) {
             $property = Property::where('name', $name)->delete();
         }
         return redirect()->action('App\Http\Controllers\PropertyController@index');
     }
 
-    private function setName($name){
-        $propertySlug= Str::slug($name);
+    private function setName($name)
+    {
+        $propertySlug = Str::slug($name);
 
         $properties = Property::all();
 
         $t = 0;
 
         foreach ($properties as $property) {
-            if(Str::slug($property->title) === $propertySlug){
+            if (Str::slug($property->title) === $propertySlug) {
                 $t++;
             }
         }
 
-        if($t>0){
-            $propertySlug= $propertySlug . "-" . $t;
+        if ($t > 0) {
+            $propertySlug = $propertySlug . "-" . $t;
         }
 
         return $propertySlug;
