@@ -2,62 +2,42 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Str;
 
 class PropertyController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function index()
     {
-        //
-        $property = DB::select("SELECT * FROM properties");
+        $property = Property::all();
         return view('property/index')->with('properties',$property);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        //
         return view('property/create');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        //
-        
         $propertySlug = $this->setName($request->title);
+
         $property = [
-            $request->title,
-            $propertySlug,
-            $request->description,
-            $request->rental_price,
-            $request->sale_price
+            'title' => $request->title,
+            'description'=> $request->description,
+            'rental_price'=> $request->rental_price,
+            'sale_price'=> $request->sale_price,
+            'name' => $propertySlug,
         ];
-        DB::insert("INSERT INTO properties (title, name, description, rental_price, sale_price) VALUES
-                    (?,?,?,?,?)",$property);
+        Property::create($property);
         return redirect()->action('App\Http\Controllers\PropertyController@index');
+
     }
 
     public function show($name)
     {
-        //
-        $property = DB::select("SELECT * FROM properties WHERE name = ?", [$name]);
+        $property = Property::where('name', $name)->get();
         if(!empty($property)){
             return view('property/show')->with('property', $property);
         }
@@ -69,8 +49,7 @@ class PropertyController extends Controller
 
     public function edit($name)
     {
-        //
-        $property = DB::select("SELECT * FROM properties WHERE name = ?", [$name]);
+        $property = Property::where('name', $name)->get();
         if(!empty($property)){
             return view('property/edit')->with('property', $property);
         }
@@ -79,48 +58,40 @@ class PropertyController extends Controller
         }
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
         //
         $propertySlug = $this->setName($request->title);
-        $property = [
-            $request->title,
-            $propertySlug,
-            $request->description,
-            $request->rental_price,
-            $request->sale_price,
-            $id
-        ];
-        DB::update("UPDATE properties SET title = ? , name = ?, description = ?, rental_price = ?, sale_price = ?
-                    WHERE id = ?",$property);
+        $property = Property::find($id);
+
+        $property->title = $request->title;
+        $property->description = $request->description;
+        $property->rental_price = $request->rental_price;
+        $property->sale_price = $request->sale_price;
+        $property->name = $propertySlug;
+
+        $property->save();
+
         return redirect()->action('App\Http\Controllers\PropertyController@index');
     }
 
 
     public function destroy($name)
     {
-        //
-        $property = DB::select("SELECT * FROM properties WHERE name = ?", [$name]);
+        $property = Property::where('name', $name)->get();
         if(!empty($property)){
-            DB::delete("DELETE FROM properties WHERE name = ?", [$name]);
+            $property = Property::where('name', $name)->delete();
         }
         return redirect()->action('App\Http\Controllers\PropertyController@index');
     }
 
     private function setName($name){
         $propertySlug= Str::slug($name);
-        
-        $properties = DB::select("SELECT * FROM properties");
-        
+
+        $properties = Property::all();
+
         $t = 0;
-        
+
         foreach ($properties as $property) {
             if(Str::slug($property->title) === $propertySlug){
                 $t++;
@@ -130,7 +101,7 @@ class PropertyController extends Controller
         if($t>0){
             $propertySlug= $propertySlug . "-" . $t;
         }
-        
+
         return $propertySlug;
     }
 }
