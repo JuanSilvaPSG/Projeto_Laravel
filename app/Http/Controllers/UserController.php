@@ -12,4 +12,10 @@ class UserController extends Controller
         return "<h1>Listagem do usuário com código {$id} </h1>" ;
 
     }
+
+    public function getData()
+    {
+        # code...
+        return "<h1>Disparou ação de GET</h1>";
+    }
 }

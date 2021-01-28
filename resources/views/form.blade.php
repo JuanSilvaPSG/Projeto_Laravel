@@ -12,7 +12,7 @@
 <body>
 
     <div class="container my-5">
-        <form action="" autocomplete="off">
+        <form action="{{ url('/getData') }}" method="GET" autocomplete="off">
             <div class="form-group">
                 <label for="first_name">Primeiro Nome</label>
                 <input type="text" name="first_name" id="first_name" class="form-control" value="Juan">

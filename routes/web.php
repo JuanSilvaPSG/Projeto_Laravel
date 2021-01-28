@@ -42,4 +42,5 @@ Route::view('/form', 'form');
  */
 
 
- Route::get('users/{id}', 'App\Http\Controllers\UserController@index');
+ Route::get('/users/{id}', 'App\Http\Controllers\UserController@index');
+ Route::get('/getData', 'App\Http\Controllers\UserController@getData');
