@@ -10,25 +10,26 @@
     <?= csrf_field(); ?>
     <div class="form-group">
     <label for="title">Título do Imóvel</label>
-    <input type="text" name="title" id="title">
+    <input type="text" name="title" id="title" class="form-control">
     </div>
 
     <div class="form-group">
     <label for="description">Descrição</label>
-    <textarea name="description" id="description" cols="30" rows="10"></textarea>
+    <textarea name="description" id="description" cols="30" rows="10" class="form-control"></textarea>
     </div>
 
-    <div class="form-group">
-    <label for="rental_price">Valor de Locação</label>
-    <input type="text" name="rental_price" id="rental_price">
-    </div>
+    <div class="form-row">
+        <div class="form-group col-md-6">
+        <label for="rental_price">Valor de Locação</label>
+        <input type="text" name="rental_price" id="rental_price" class="form-control">
+        </div>
 
-    <div class="form-group">
-    <label for="sale_price">Valor de Compra</label>
-    <input type="text" name="sale_price" id="sale_price">
+        <div class="form-group col-md-6">
+        <label for="sale_price">Valor de Compra</label>
+        <input type="text" name="sale_price" id="sale_price" class="form-control">
+        </div>
     </div>
-
-    <button type="submit">Cadastrar Imóvel</button>
+    <button type="submit" class="btn btn-secondary">Cadastrar Imóvel</button>
 
 </form></div>
 @endsection
